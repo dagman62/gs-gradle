@@ -1,17 +1,17 @@
 node {
-  def myGradleContainer = docker.image('keeganwitt/docker-gradle-root')
+  def myGradleContainer = docker.image('dagman62/gradle:jdk8')
   myGradleContainer.pull()
   stage('prep') {
     checkout scm
   }
   stage('test') {
      myGradleContainer.inside("-v ${env.HOME}/.gradle:/home/gradle/.gradle") {
-       sh 'cd complete && gradle test'
+       sh 'cd complete && gradle --stacktrace --debug test'
      }
   }
   stage('run') {
      myGradleContainer.inside("-v ${env.HOME}/.gradle:/home/gradle/.gradle") {
-       sh 'cd complete && gradle run'
+       sh 'cd complete && gradle --stacktrace --debub run'
      }
   }
 }
